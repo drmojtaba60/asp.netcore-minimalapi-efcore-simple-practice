@@ -1,6 +1,6 @@
 ﻿namespace ToDoMinimalApiContextDbPractice.Models.Entities
 {
-    public class Todo
+    public record Todo
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -10,12 +10,12 @@
 
         public virtual Category Category { get; set; }
     }
-    public class Category
+    public record Category
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
 
 
-        public virtual ICollection<Todo> Todoes { get; set; }=new HashSet<Todo>();
+        public virtual ICollection<Todo> Todoes { get; set; }//=new HashSet<Todo>();
     }
 }

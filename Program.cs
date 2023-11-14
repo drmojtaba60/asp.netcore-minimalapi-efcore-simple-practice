@@ -33,17 +33,16 @@ app.UseAuthorization();
 app.MapControllers();
 
 
-
 app.MapGet("/todoitems", async (ToDoContext db) =>
 {
-    if(!await db.Todos.AnyAsync())
-    {
-            db.Todos.Add(new Todo { Id = 1,Name="test" });
-        await db.SaveChangesAsync();
-    }
-    return await db.Todos.ToListAsync();
+    var result = await db.Todos.AsNoTracking().Select(q =>
+        new Todo { Id = q.Id, Name = q.Name,IsComplete=q.IsComplete, CategoryId = q.CategoryId, 
+            Category = new Category { Id = q.CategoryId??0,Name=q.Category.Name}
+            }
+        ).ToListAsync();
+    return result;
 });
-    
+
 
 app.MapGet("/todoitems/complete", async (ToDoContext db) =>
     await db.Todos.Where(t => t.IsComplete).ToListAsync());
